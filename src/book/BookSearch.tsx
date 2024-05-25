@@ -37,47 +37,49 @@ const validateISBN13 = (isbn: string): boolean => {
 };
 
 const BookSearch: React.FC<BookSearchProps> = ({ addBook }) => {
-  const [isbn, setIsbn] = useState<string>('');
-  const [error, setError] = useState<string>('');
-
-  const handleSearch = async () => {
-    if (!validateISBN(isbn)) {
-      setError('Invalid ISBN. Please enter a valid ISBN-10 or ISBN-13.');
-      return;
-    }
-
-    try {
-      const response = await axios.get(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-      const bookData = response.data[`ISBN:${isbn}`];
-      if (bookData) {
-        addBook({
-          isbn,
-          title: bookData.title,
-          author: bookData.authors[0].name,
-          coverImage: bookData.cover.medium,
-          rating: 0,
-          bookshelf: 'All Books'
-        });
-        setError('');
-      } else {
-        setError('No book found with this ISBN. Please try another.');
-      }
-    } catch (error) {
-      setError('An error occurred while fetching book data. Please try again later.');
-    }
+	const [isbn, setIsbn] = useState<string>('');
+	const [error, setError] = useState<string>('');
+  
+	const handleSearch = async () => {
+	  if (!validateISBN(isbn)) {
+		setError('Invalid ISBN. Please enter a valid ISBN-10 or ISBN-13.');
+		return;
+	  }
+  
+	  try {
+		const response = await axios.get(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+		console.log(response.data);
+		const bookData = response.data[`ISBN:${isbn}`];
+		if (bookData) {
+		  addBook({
+			isbn,
+			title: bookData.title,
+			author: bookData.authors[0].name,
+			coverImage: bookData.cover.medium,
+			rating: 0,
+			bookshelf: 'All Books'
+		  });
+		  setError('');
+		  setIsbn(''); // Clear the ISBN input state on successful addition
+		} else {
+		  setError('No book found with this ISBN. Please try another.');
+		}
+	  } catch (error) {
+		setError('An error occurred while fetching book data. Please try again later.');
+	  }
+	};
+  
+	return (
+	  <Box>
+		<Input
+		  placeholder="Enter ISBN"
+		  value={isbn}
+		  onChange={(e) => setIsbn(e.target.value)}
+		/>
+		<Button onClick={handleSearch}>Add Book</Button>
+		{error && <Text color="red.500">{error}</Text>}
+	  </Box>
+	);
   };
-
-  return (
-    <Box>
-      <Input
-        placeholder="Enter ISBN"
-        value={isbn}
-        onChange={(e) => setIsbn(e.target.value)}
-      />
-      <Button onClick={handleSearch}>Add Book</Button>
-      {error && <Text color="red.500">{error}</Text>}
-    </Box>
-  );
-};
 
 export default BookSearch;
