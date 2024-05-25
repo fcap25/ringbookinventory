@@ -10,7 +10,7 @@ interface StarRatingProps {
 
 const StarRating: React.FC<StarRatingProps> = ({ rating, onRate }) => {
 	return (
-	  <HStack>
+	  <HStack spacing={0}>
 		{[1, 2, 3, 4, 5].map((star) => {
         const isActive = star <= rating;
         return (
@@ -19,8 +19,10 @@ const StarRating: React.FC<StarRatingProps> = ({ rating, onRate }) => {
             icon={<StarIcon />}
             aria-label={`${star} Stars`}
             onClick={() => onRate(star)}
-            size="sm"
-			border={"none"}
+            size="md"
+			bgColor={"transparent"}
+			variant="unstyled"
+			boxShadow={"none"}
             sx={{
               color: isActive ? 'yellow.400' : 'gray.400',
               _hover: { color: isActive ? 'yellow.300' : 'yellow.400' },
