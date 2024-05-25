@@ -12,7 +12,7 @@ interface BookListProps {
 	return (
 	  <VStack spacing={4} mt={4} w="25%">
 		{books.map((book) => (
-		  <Box key={book.isbn} p={4} borderWidth={1} borderRadius="md" w="100%" bgColor={"slateblue"}>
+		  <Box key={book.isbn} p={4} borderWidth={1} borderRadius="md" w="fit-content" bgColor={"primary.300"}>
 			<HStack justifyContent="space-between">
 			  <VStack alignItems="flex-start">
 				<Text fontSize="lg" fontWeight="bold">{book.title}</Text>

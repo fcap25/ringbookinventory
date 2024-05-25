@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Input, Button, Flex, useToast } from '@chakra-ui/react';
 import axios from "axios";
 import { BookContext } from '../contexts/BookContext';
+import { SmallAddIcon } from '@chakra-ui/icons';
 
 const validateISBN = (isbn: string): boolean => {
   isbn = isbn.replace(/[\s-]/g, '');
@@ -95,15 +96,14 @@ const BookSearch: React.FC = () => {
   };
 
   return (
-    <Flex direction={"column"} gap={2} w="20%">
+    <Flex direction={"column"} gap={2} w="20%" align={"center"}>
       <Input
         placeholder="Enter ISBN"
         value={isbn}
         onChange={(e) => setIsbn(e.target.value)}
-        bgColor={"black"}
-        color={"white"}
+		variant={"search"}
       />
-      <Button bgColor="green.400" onClick={handleSearch} _hover={{bgColor: "green.300"}}>Add Book</Button>
+      <Button leftIcon={<SmallAddIcon />} w="fit-content" onClick={handleSearch}>Add Book</Button>
     </Flex>
   );
 };
