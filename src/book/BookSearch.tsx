@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
-import { Input, Button, Box, Text } from '@chakra-ui/react';
+import React, { useState, useContext } from 'react';
+import { Input, Button, Flex, useToast } from '@chakra-ui/react';
 import axios from "axios";
-import { Book } from '../types';
-
-interface BookSearchProps {
-  addBook: (book: Book) => void;
-}
+import { BookContext } from '../contexts/BookContext';
 
 const validateISBN = (isbn: string): boolean => {
   isbn = isbn.replace(/[\s-]/g, '');
@@ -36,50 +32,80 @@ const validateISBN13 = (isbn: string): boolean => {
   return (sum + check) % 10 === 0;
 };
 
-const BookSearch: React.FC<BookSearchProps> = ({ addBook }) => {
-	const [isbn, setIsbn] = useState<string>('');
-	const [error, setError] = useState<string>('');
-  
-	const handleSearch = async () => {
-	  if (!validateISBN(isbn)) {
-		setError('Invalid ISBN. Please enter a valid ISBN-10 or ISBN-13.');
-		return;
-	  }
-  
-	  try {
-		const response = await axios.get(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-		console.log(response.data);
-		const bookData = response.data[`ISBN:${isbn}`];
-		if (bookData) {
-		  addBook({
-			isbn,
-			title: bookData.title,
-			author: bookData.authors[0].name,
-			coverImage: bookData.cover.medium,
-			rating: 0,
-			bookshelf: 'All Books'
-		  });
-		  setError('');
-		  setIsbn(''); // Clear the ISBN input state on successful addition
-		} else {
-		  setError('No book found with this ISBN. Please try another.');
-		}
-	  } catch (error) {
-		setError('An error occurred while fetching book data. Please try again later.');
-	  }
-	};
-  
-	return (
-	  <Box>
-		<Input
-		  placeholder="Enter ISBN"
-		  value={isbn}
-		  onChange={(e) => setIsbn(e.target.value)}
-		/>
-		<Button onClick={handleSearch}>Add Book</Button>
-		{error && <Text color="red.500">{error}</Text>}
-	  </Box>
-	);
+const BookSearch: React.FC = () => {
+  const [isbn, setIsbn] = useState<string>('');
+  const { addBook } = useContext(BookContext)!;
+  const toast = useToast();
+
+  const handleSearch = async () => {
+    if (!validateISBN(isbn)) {
+      toast({
+        title: "Invalid ISBN",
+        description: "Please enter a valid ISBN-10 or ISBN-13.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.get(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+      console.log(response.data);
+      const bookData = response.data[`ISBN:${isbn}`];
+      if (bookData) {
+        const isDuplicate = addBook({
+          isbn,
+          title: bookData.title,
+          author: bookData.authors[0].name,
+          coverImage: bookData.cover.medium,
+          rating: 0,
+          bookshelf: 'All Books'
+        });
+
+        if (isDuplicate ===  undefined) {
+          toast({
+            title: "Book added",
+            description: "The book has been successfully added to your collection.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+
+        setIsbn(''); // Clear the ISBN input state on successful addition
+      } else {
+        toast({
+          title: "No book found",
+          description: "No book found with this ISBN. Please try another.",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error fetching book data",
+        description: "An error occurred while fetching book data. Please try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
+
+  return (
+    <Flex direction={"column"} gap={2} w="20%">
+      <Input
+        placeholder="Enter ISBN"
+        value={isbn}
+        onChange={(e) => setIsbn(e.target.value)}
+        bgColor={"black"}
+        color={"white"}
+      />
+      <Button bgColor="green.400" onClick={handleSearch} _hover={{bgColor: "green.300"}}>Add Book</Button>
+    </Flex>
+  );
+};
 
 export default BookSearch;
