@@ -13,12 +13,11 @@ const search = definePartsStyle({
 		borderRadius: "full",
 	},
 	addon: {
-	clearButton: {
-		color: "primary.500",
-		_hover: {
-			color: "primary.600",
-		},
-	},
+		border: "2px solid",
+		borderColor: "primary.600",
+		background: "primary.600",
+		borderRadius: "xl",
+		color: "white",
 	},
 })
 

@@ -6,13 +6,13 @@ interface BookListProps {
 	books: Book[];
 	rateBook: (isbn: string, rating: number) => void;
 	deleteBook: (isbn: string) => void;
-  }
+}
   
   const BookList: React.FC<BookListProps> = ({ books, rateBook, deleteBook }) => {
 	return (
-	  <VStack spacing={4} mt={4} w="25%">
+	  <VStack spacing={4} mt={4} w="45%">
 		{books.map((book) => (
-		  <Box key={book.isbn} p={4} borderWidth={1} borderRadius="md" w="fit-content" bgColor={"primary.300"}>
+		  <Box key={book.isbn} p={4} borderWidth={1} borderRadius="md" w="100%" bgColor={"primary.300"}>
 			<HStack justifyContent="space-between">
 			  <VStack alignItems="flex-start">
 				<Text fontSize="lg" fontWeight="bold">{book.title}</Text>

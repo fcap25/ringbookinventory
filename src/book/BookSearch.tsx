@@ -1,8 +1,15 @@
 import React, { useState, useContext } from 'react';
-import { Input, Button, Flex, useToast } from '@chakra-ui/react';
+import { InputGroup, Input, Button, Flex, useToast, InputLeftAddon, InputLeftElement, InputRightElement, HStack } from '@chakra-ui/react';
 import axios from "axios";
 import { BookContext } from '../contexts/BookContext';
 import { SmallAddIcon } from '@chakra-ui/icons';
+import { SearchIcon } from '@chakra-ui/icons';
+
+
+interface BookSearchProps {
+	searchTerm: string;
+	setSearchTerm: (term: string) => void;
+}
 
 const validateISBN = (isbn: string): boolean => {
   isbn = isbn.replace(/[\s-]/g, '');
@@ -33,7 +40,7 @@ const validateISBN13 = (isbn: string): boolean => {
   return (sum + check) % 10 === 0;
 };
 
-const BookSearch: React.FC = () => {
+const BookSearch: React.FC<BookSearchProps> = ({ searchTerm, setSearchTerm }) => {
   const [isbn, setIsbn] = useState<string>('');
   const { addBook } = useContext(BookContext)!;
   const toast = useToast();
@@ -96,14 +103,25 @@ const BookSearch: React.FC = () => {
   };
 
   return (
-    <Flex direction={"column"} gap={2} w="20%" align={"center"}>
-      <Input
-        placeholder="Enter ISBN"
-        value={isbn}
-        onChange={(e) => setIsbn(e.target.value)}
-		variant={"search"}
-      />
+    <Flex direction={"column"} gap={6} w="40%" align={"center"}>
+	  <InputGroup variant={"search"}>
+	  <InputLeftAddon children="ISBN" />
+		<Input
+		  placeholder="Enter ISBN"
+		  value={isbn}
+		  onChange={(e) => setIsbn(e.target.value)}
+		/>
+		<InputRightElement>
+			<SearchIcon color="gray.300" />
+		</InputRightElement>
+	  </InputGroup>
       <Button leftIcon={<SmallAddIcon />} w="fit-content" onClick={handleSearch}>Add Book</Button>
+	  <HStack>
+	  	<InputGroup variant={"search"}>
+          <InputLeftElement pointerEvents="none" children={<SearchIcon color="gray.300" />} px={6} />
+          <Input placeholder="Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+        </InputGroup>
+	  </HStack>
     </Flex>
   );
 };
