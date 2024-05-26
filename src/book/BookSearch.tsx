@@ -1,14 +1,19 @@
 import React, { useState, useContext } from 'react';
-import { InputGroup, Input, Button, Flex, useToast, InputLeftAddon, InputLeftElement, InputRightElement, HStack } from '@chakra-ui/react';
+import { InputGroup, Input, Button, Flex, useToast, InputLeftAddon, InputLeftElement, InputRightElement, HStack, Select, Slide } from '@chakra-ui/react';
 import axios from "axios";
 import { BookContext } from '../contexts/BookContext';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import { SearchIcon } from '@chakra-ui/icons';
 
-
 interface BookSearchProps {
 	searchTerm: string;
 	setSearchTerm: (term: string) => void;
+	filterCriteria: string; 
+    setFilterCriteria: (criteria: string) => void; 
+	authors: string[]; 
+  	selectedAuthor: string; 
+  	setSelectedAuthor: (author: string) => void; 
+	isOpen: boolean;
 }
 
 const validateISBN = (isbn: string): boolean => {
@@ -40,7 +45,7 @@ const validateISBN13 = (isbn: string): boolean => {
   return (sum + check) % 10 === 0;
 };
 
-const BookSearch: React.FC<BookSearchProps> = ({ searchTerm, setSearchTerm }) => {
+const BookSearch: React.FC<BookSearchProps> = ({ searchTerm, setSearchTerm, filterCriteria, setFilterCriteria, authors, selectedAuthor, setSelectedAuthor, isOpen }) => {
   const [isbn, setIsbn] = useState<string>('');
   const { addBook } = useContext(BookContext)!;
   const toast = useToast();
@@ -116,11 +121,26 @@ const BookSearch: React.FC<BookSearchProps> = ({ searchTerm, setSearchTerm }) =>
 		</InputRightElement>
 	  </InputGroup>
       <Button leftIcon={<SmallAddIcon />} w="fit-content" onClick={handleSearch}>Add Book</Button>
-	  <HStack>
-	  	<InputGroup variant={"search"}>
+	  <HStack transition={"all 0.5s ease"} w="fit-content" justify={"space-evenly"}>
+	  	<InputGroup variant={"search"} w="50%">
           <InputLeftElement pointerEvents="none" children={<SearchIcon color="gray.300" />} px={6} />
           <Input placeholder="Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </InputGroup>
+		<Select variant={""} placeholder="Filter by" onChange={(e) => setFilterCriteria(e.target.value)} value={filterCriteria} w="50%">
+          <option value="author">Author</option>
+          <option value="rating-high-to-low">Rating High to Low</option>
+          <option value="rating-low-to-high">Rating Low to High</option>
+          <option value="recently-added">Recently Added</option>
+        </Select>
+		<Slide in={isOpen} direction="bottom" unmountOnExit transition={{ exit: { delay: .5 }, enter: { duration: 0.5 } }} style={{ width: "100%"}}>
+          <Select variant={""} placeholder="Select author" onChange={(e) => setSelectedAuthor(e.target.value)} value={selectedAuthor}>
+            {authors.map((author) => (
+              <option key={author} value={author}>
+                {author}
+              </option>
+            ))}
+          </Select>
+        </Slide>
 	  </HStack>
     </Flex>
   );

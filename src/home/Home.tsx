@@ -1,5 +1,5 @@
 // src/home/Home.tsx
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Box, Heading, VStack, HStack, Button, Select, Flex } from '@chakra-ui/react';
 import { 
   AlertDialog,
@@ -18,16 +18,43 @@ import { HomeBg } from '../assets';
 const Home: React.FC = () => {
   const { books, confirmAddBook, rateBook, deleteBook, isDuplicate, catchDupe, searchInventory } = useContext(BookContext)!;
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filterCriteria, setFilterCriteria] = useState<string>('' as string);
+  const [selectedAuthor, setSelectedAuthor] = useState<string>('');
+  const [authors, setAuthors] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const noAddRef = React.useRef(null);
-  const filteredBooks = books.filter((book) => searchInventory(searchTerm, book));
-  //const [searchTerm, setSearchTerm] = useState('' as string);
+
+  useEffect(() => {
+    const authorList = Array.from(new Set(books.map(book => book.author)));
+    setAuthors(authorList);
+  }, [books]);
+
+  useEffect(() => {
+    if (filterCriteria === 'author') {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [filterCriteria]);
+
+  let filteredBooks = books.filter((book) => searchInventory(searchTerm, book));
+
+  if (filterCriteria === 'author' && selectedAuthor) {
+    filteredBooks = filteredBooks.filter((book) => book.author === selectedAuthor);
+  } else if (filterCriteria === 'rating-high-to-low') {
+    filteredBooks.sort((a, b) => b.rating - a.rating);
+  } else if (filterCriteria === 'rating-low-to-high') {
+    filteredBooks.sort((a, b) => a.rating - b.rating);
+  } else if (filterCriteria === 'recently-added') {
+    filteredBooks = books; // Assuming books are already in recently added order
+  }
 
   return (
 	<Flex position="relative" bgImage={HomeBg} bgPosition={"center"} bgSize={"cover"} h="100vh"> 
     <Box position={"absolute"} top="0" w="100%" h="100%" bgColor={"rgba(0, 0, 0, .5)"}>
 	<Box display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"flex-start"} pt={20} zIndex={10}>
       <Heading color={"white"} fontSize="4xl" mb={6}>Book Inventory Management System</Heading>
-      <BookSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <BookSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} filterCriteria={filterCriteria} setFilterCriteria={setFilterCriteria} authors={authors} selectedAuthor={selectedAuthor} setSelectedAuthor={setSelectedAuthor} isOpen={isOpen} />
       <AlertDialog leastDestructiveRef={noAddRef} isOpen={isDuplicate} onClose={catchDupe}>
         <AlertDialogOverlay>
           <AlertDialogContent>
