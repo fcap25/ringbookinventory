@@ -11,6 +11,7 @@ interface BookContextProps {
   isDuplicate: boolean;
   duplicateBook: Book | null;
   catchDupe: () => void;
+  searchInventory: (searchTerm: string, book: Book) => boolean;
 }
 
 const BookContext = createContext<BookContextProps | undefined>(undefined);
@@ -74,8 +75,16 @@ const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setDuplicateBook(null);
   };
 
+  const searchInventory = (searchTerm: string, book: Book): boolean => {
+	return (
+	  book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+	  book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+	  book.isbn.toLowerCase().includes(searchTerm.toLowerCase())
+	);
+  };
+
   return (
-    <BookContext.Provider value={{ books, addBook, confirmAddBook, rateBook, deleteBook, isDuplicate, duplicateBook, catchDupe }}>
+    <BookContext.Provider value={{ books, addBook, confirmAddBook, rateBook, deleteBook, isDuplicate, duplicateBook, catchDupe, searchInventory }}>
       {children}
     </BookContext.Provider>
   );

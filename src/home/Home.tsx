@@ -1,5 +1,5 @@
 // src/home/Home.tsx
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Heading, VStack, HStack, Button, Select, Flex } from '@chakra-ui/react';
 import { 
   AlertDialog,
@@ -16,15 +16,18 @@ import { BookContext } from '../contexts/BookContext';
 import { HomeBg } from '../assets';
 
 const Home: React.FC = () => {
-  const { books, confirmAddBook, rateBook, deleteBook, isDuplicate, catchDupe } = useContext(BookContext)!;
+  const { books, confirmAddBook, rateBook, deleteBook, isDuplicate, catchDupe, searchInventory } = useContext(BookContext)!;
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const noAddRef = React.useRef(null);
+  const filteredBooks = books.filter((book) => searchInventory(searchTerm, book));
+  //const [searchTerm, setSearchTerm] = useState('' as string);
 
   return (
 	<Flex position="relative" bgImage={HomeBg} bgPosition={"center"} bgSize={"cover"} h="100vh"> 
     <Box position={"absolute"} top="0" w="100%" h="100%" bgColor={"rgba(0, 0, 0, .5)"}>
 	<Box display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"flex-start"} pt={20} zIndex={10}>
       <Heading color={"white"} fontSize="4xl" mb={6}>Book Inventory Management System</Heading>
-      <BookSearch />
+      <BookSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <AlertDialog leastDestructiveRef={noAddRef} isOpen={isDuplicate} onClose={catchDupe}>
         <AlertDialogOverlay>
           <AlertDialogContent>
@@ -48,7 +51,7 @@ const Home: React.FC = () => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
-      <BookList books={books} rateBook={rateBook} deleteBook={deleteBook} />
+      <BookList books={filteredBooks} rateBook={rateBook} deleteBook={deleteBook} />
 	  </Box>
     </Box>
 	</Flex>
