@@ -1,6 +1,5 @@
-import { Box, Text, VStack, HStack, Button, SimpleGrid, Flex } from '@chakra-ui/react';
+import { Grid, GridItem,  } from '@chakra-ui/react';
 import { Book } from '../types';
-import StarRating from '../components/StarRating';
 import BookCard from './BookCard';
 
 interface BookListProps {
@@ -11,13 +10,14 @@ interface BookListProps {
   
 const BookList: React.FC<BookListProps> = ({ books, rateBook, deleteBook }) => {
 	return (
-	<Flex justifyContent="center" alignItems="center" direction={"row"} py={10} w="100%" h="100%">
-	  <SimpleGrid columns={6} minChildWidth={"100px"} spacing={24} alignItems="center" justifyContent={"center"} w="80%">
+	  <Grid templateColumns={'repeat(6,.5fr)'} templateRows={'repeat(2, 1fr)'} gap={6} w="90%" h="100%" mt={10}>
 	  {books.map((book) => (
+		<GridItem key={book.isbn} w='100%' h="fit-content">
         <BookCard key={book.isbn} book={book} rateBook={rateBook} deleteBook={deleteBook} />
+		</GridItem>
       ))}
-	  </SimpleGrid>
-	</Flex>
+	  </Grid>
+
 	);
   };
 

@@ -19,6 +19,7 @@ interface BookCardProps {
       onMouseLeave={onClose}
       transition="all 0.3s ease-in-out"
       transform={isOpen ? 'scale(1.005)' : 'scale(1)'}
+	  cursor={"pointer"}
     >
       <VStack alignItems="center" transition="all 0.3s ease-in-out">
         {book.coverImage && (
