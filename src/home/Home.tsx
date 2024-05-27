@@ -50,9 +50,9 @@ const Home: React.FC = () => {
   }
 
   return (
-	<Flex position="relative" bgImage={HomeBg} bgPosition={"center"} bgSize={"cover"} h="100vh"> 
+	<Flex flex={1} position="relative" bgImage={HomeBg} bgPosition={"center"} bgSize={"cover"} h="100vh" bgRepeat="no-repeat"> 
     <Box position={"absolute"} top="0" w="100%" h="100%" bgColor={"rgba(0, 0, 0, .5)"}>
-	<Box display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"flex-start"} pt={20} zIndex={10}>
+	<Box display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"flex-start"} pt={10} zIndex={10} h="50%">
       <Heading color={"white"} fontSize="4xl" mb={6}>Book Inventory Management System</Heading>
       <BookSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} filterCriteria={filterCriteria} setFilterCriteria={setFilterCriteria} authors={authors} selectedAuthor={selectedAuthor} setSelectedAuthor={setSelectedAuthor} isOpen={isOpen} />
       <AlertDialog leastDestructiveRef={noAddRef} isOpen={isDuplicate} onClose={catchDupe}>
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
-      <BookList books={filteredBooks} rateBook={rateBook} deleteBook={deleteBook} />
+	  <BookList books={filteredBooks} rateBook={rateBook} deleteBook={deleteBook} />
 	  </Box>
     </Box>
 	</Flex>

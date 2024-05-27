@@ -19,7 +19,7 @@ const StarRating: React.FC<StarRatingProps> = ({ rating, onRate }) => {
             icon={<StarIcon />}
             aria-label={`${star} Stars`}
             onClick={() => onRate(star)}
-            size="md"
+            size="sm"
 			bgColor={"transparent"}
 			variant="unstyled"
 			boxShadow={"none"}
