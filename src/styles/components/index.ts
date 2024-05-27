@@ -1,3 +1,4 @@
 import buttonStyles from './buttons';
 import { inputStyles } from './inputs';
-export { buttonStyles, inputStyles };
+import { selectStyles } from './selects';
+export { buttonStyles, inputStyles, selectStyles };

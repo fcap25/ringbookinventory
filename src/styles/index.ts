@@ -1,11 +1,12 @@
 // src/theme.ts
 import { extendTheme } from '@chakra-ui/react';
-import { buttonStyles, inputStyles } from './components';
+import { buttonStyles, inputStyles, selectStyles } from './components';
 import { colors, fonts } from './theme';
 
 const componentStyles = {
 	Button: buttonStyles,
-	Input: inputStyles
+	Input: inputStyles,
+	Select: selectStyles
 };
 
 const theme = extendTheme({

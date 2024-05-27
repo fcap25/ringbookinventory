@@ -44,9 +44,9 @@ const Home: React.FC = () => {
   } else if (filterCriteria === 'rating-high-to-low') {
     filteredBooks.sort((a, b) => b.rating - a.rating);
   } else if (filterCriteria === 'rating-low-to-high') {
-    filteredBooks.sort((a, b) => a.rating - b.rating);
+	filteredBooks.sort((a, b) => a.rating - b.rating);
   } else if (filterCriteria === 'recently-added') {
-    filteredBooks = books; // Assuming books are already in recently added order
+	filteredBooks = [...books].reverse();
   }
 
   return (

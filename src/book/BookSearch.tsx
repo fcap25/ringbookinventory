@@ -108,7 +108,7 @@ const BookSearch: React.FC<BookSearchProps> = ({ searchTerm, setSearchTerm, filt
   };
 
   return (
-    <Flex direction={"column"} gap={6} w="40%" align={"center"}>
+    <Flex direction={"column"} gap={6} w="40%" align={"center"} justify={"center"}>
 	  <InputGroup variant={"search"}>
 	  <InputLeftAddon children="ISBN" />
 		<Input
@@ -124,15 +124,16 @@ const BookSearch: React.FC<BookSearchProps> = ({ searchTerm, setSearchTerm, filt
 	  <HStack transition={"all 0.5s ease"} w="fit-content" justify={"space-evenly"}>
 	  	<InputGroup variant={"search"} w="50%">
           <InputLeftElement pointerEvents="none" children={<SearchIcon color="gray.300" />} px={6} />
-          <Input placeholder="Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+          <Input placeholder="Search Inventory" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </InputGroup>
-		<Select variant={""} placeholder="Filter by" onChange={(e) => setFilterCriteria(e.target.value)} value={filterCriteria} w="50%">
+		<Select variant="" placeholder="Filter by" onChange={(e) => setFilterCriteria(e.target.value)} value={filterCriteria} w="50%">
           <option value="author">Author</option>
           <option value="rating-high-to-low">Rating High to Low</option>
           <option value="rating-low-to-high">Rating Low to High</option>
           <option value="recently-added">Recently Added</option>
         </Select>
-		<Slide in={isOpen} direction="bottom" unmountOnExit transition={{ exit: { delay: .5 }, enter: { duration: 0.5 } }} style={{ width: "100%"}}>
+	  </HStack>
+	  <Slide in={isOpen} direction="bottom" unmountOnExit style={{ width: "50%", zIndex: "20", justifySelf: "center", padding: 10}}> 
           <Select variant={""} placeholder="Select author" onChange={(e) => setSelectedAuthor(e.target.value)} value={selectedAuthor}>
             {authors.map((author) => (
               <option key={author} value={author}>
@@ -141,7 +142,6 @@ const BookSearch: React.FC<BookSearchProps> = ({ searchTerm, setSearchTerm, filt
             ))}
           </Select>
         </Slide>
-	  </HStack>
     </Flex>
   );
 };
