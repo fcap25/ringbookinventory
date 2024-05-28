@@ -11,9 +11,11 @@ import {
   InputLeftElement,
   InputRightElement,
   HStack,
+  Stack,
   Select,
   Slide,
-  useDisclosure 
+  useDisclosure,
+  Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import CreateBookshelfModal from '../components/CreateBookshelfModal';
@@ -159,7 +161,7 @@ const BookSearch: React.FC<BookSearchProps> = ({
     <Flex
       direction={'column'}
       gap={6}
-      w="40%"
+      w={{base: "90%", md: "40%"}}
       align={'center'}
       justify={'center'}
     >
@@ -217,11 +219,12 @@ const BookSearch: React.FC<BookSearchProps> = ({
         ))}
         </Select>
       </HStack>
-	  <HStack>
+	  <Stack direction={{base: "column", md: "row"}}>
         <Button onClick={onCreateOpen}>Add Bookshelf</Button>
         <Button onClick={onDeleteOpen}>Delete Bookshelf</Button>
         <Button onClick={onEditOpen}>Edit Bookshelf</Button>
-      </HStack>
+		<Text color="gold" display={{md: "none"}}>(Click Book To Add To a Bookshelf)</Text>
+      </Stack>
 
       <CreateBookshelfModal isOpen={isCreateOpen} onClose={onCreateClose} />
       <DeleteBookshelfModal isOpen={isDeleteOpen} onClose={onDeleteClose} />

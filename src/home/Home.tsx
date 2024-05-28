@@ -102,8 +102,9 @@ const Home: React.FC = () => {
           h="100%"
           maxH={'100vh'}
           overflowY={'scroll'}
+		  textAlign={{base: "center", md: "left"}}
         >
-          <Heading color={'white'} fontSize="4xl" mb={6}>
+          <Heading color={'white'} fontSize={{base: "2xl", md:"4xl"}} mb={6}>
             Book Inventory Management System
           </Heading>
           <BookSearch
