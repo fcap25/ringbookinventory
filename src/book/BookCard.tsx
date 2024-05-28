@@ -3,14 +3,15 @@ import {
   Box,
   Text,
   VStack,
-  HStack,
   Button,
   Image,
   Collapse,
   useDisclosure,
 } from '@chakra-ui/react';
-import StarRating from '../components/StarRating'; // Assuming you have a StarRating component
+import StarRating from '../components/StarRating';
 import { Book } from '../types';
+import BookModal from './BookModal';
+
 interface BookCardProps {
   book: Book;
   rateBook: (isbn: string, rating: number) => void;
@@ -18,53 +19,40 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book, rateBook, deleteBook }) => {
+  const [isHovered, setIsHovered] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Box
       p={4}
       w="fit-content"
-      onMouseEnter={onOpen}
-      onMouseLeave={onClose}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={onOpen}
+      cursor="pointer"
       transition="all 0.3s ease-in-out"
-      transform={isOpen ? 'scale(1.005)' : 'scale(1)'}
-      cursor={'pointer'}
+      transform={isHovered ? 'scale(1.005)' : 'scale(1)'}
     >
       <VStack alignItems="center" transition="all 0.3s ease-in-out">
         {book.coverImage && (
-          <Image
-            src={book.coverImage}
-            alt={book.title}
-            borderRadius={'lg'}
-            //style={{ width: '150px', height: '200px', objectFit: 'cover' }}
-          />
+          <Image src={book.coverImage} alt={book.title} borderRadius="lg" />
         )}
         <Text color="white" fontSize="lg" fontWeight="bold" mt={2}>
           {book.title}
         </Text>
         <Text color="white">{book.author}</Text>
-        <StarRating
-          rating={book.rating}
-          onRate={rating => rateBook(book.isbn, rating)}
-        />
-        <Collapse
-          in={isOpen}
-          animateOpacity
-          unmountOnExit
-          transition={{ exit: { delay: 0.25 }, enter: { duration: 0.4 } }}
-        >
-          <VStack>
+        <StarRating rating={book.rating} onRate={(rating) => rateBook(book.isbn, rating)} />
+        <Collapse animateOpacity in={isHovered} unmountOnExit>
+          <VStack align="center">
             <Text color="white">ISBN: {book.isbn}</Text>
-            <Button
-              colorScheme="red"
-              _hover={{ transform: 'translateY(-2px)' }}
-              onClick={() => deleteBook(book.isbn)}
-            >
+			<Text color="white">(Click To Add To a Bookshelf)</Text>
+            <Button colorScheme="red" onClick={(e) => { e.stopPropagation(); deleteBook(book.isbn); }}>
               Delete
             </Button>
           </VStack>
         </Collapse>
       </VStack>
+      <BookModal isOpen={isOpen} onClose={onClose} book={book} />
     </Box>
   );
 };

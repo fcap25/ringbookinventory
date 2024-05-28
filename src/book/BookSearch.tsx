@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-
+import { useBookshelf } from '../contexts/BookshelfContext';
 import { SmallAddIcon, SearchIcon } from '@chakra-ui/icons';
 import {
   InputGroup,
@@ -13,8 +13,12 @@ import {
   HStack,
   Select,
   Slide,
+  useDisclosure 
 } from '@chakra-ui/react';
 import axios from 'axios';
+import CreateBookshelfModal from '../components/CreateBookshelfModal';
+import DeleteBookshelfModal from '../components/DeleteBookshelfModal';
+import EditBookshelfModal from '../components/EditBookshelfModal';
 
 import { BookContext } from '../contexts/BookContext';
 
@@ -70,7 +74,25 @@ const BookSearch: React.FC<BookSearchProps> = ({
 }) => {
   const [isbn, setIsbn] = useState<string>('');
   const { addBook } = useContext(BookContext)!;
+  const { addBookshelf, deleteBookshelf, editBookshelf } = useBookshelf();
+  const { bookshelves } = useBookshelf();
   const toast = useToast();
+
+  const {
+    isOpen: isCreateOpen,
+    onOpen: onCreateOpen,
+    onClose: onCreateClose,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
 
   const handleSearch = async () => {
     if (!validateISBN(isbn)) {
@@ -97,7 +119,7 @@ const BookSearch: React.FC<BookSearchProps> = ({
           author: bookData.authors[0].name,
           coverImage: bookData.cover.medium,
           rating: 0,
-          bookshelf: 'All Books',
+          bookshelves: [],
         });
 
         if (isDuplicate === undefined) {
@@ -190,17 +212,31 @@ const BookSearch: React.FC<BookSearchProps> = ({
           <option value="rating-high-to-low">Rating High to Low</option>
           <option value="rating-low-to-high">Rating Low to High</option>
           <option value="recently-added">Recently Added</option>
+		  {bookshelves.map(shelf => (
+          <option key={shelf.name} value={`bookshelf-${shelf.name}`}>{shelf.name}</option>
+        ))}
         </Select>
       </HStack>
+	  <HStack>
+        <Button onClick={onCreateOpen}>Add Bookshelf</Button>
+        <Button onClick={onDeleteOpen}>Delete Bookshelf</Button>
+        <Button onClick={onEditOpen}>Edit Bookshelf</Button>
+      </HStack>
+
+      <CreateBookshelfModal isOpen={isCreateOpen} onClose={onCreateClose} />
+      <DeleteBookshelfModal isOpen={isDeleteOpen} onClose={onDeleteClose} />
+      <EditBookshelfModal isOpen={isEditOpen} onClose={onEditClose} />
+
       <Slide
         in={isOpen}
         direction="bottom"
         unmountOnExit
         style={{
-          width: '50%',
+          width: '35%',
           zIndex: '20',
           justifySelf: 'end',
           padding: 10,
+		  marginRight: '10px',
         }}
       >
         <Select

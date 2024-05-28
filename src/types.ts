@@ -4,7 +4,7 @@ export interface Book {
   author: string;
   coverImage: string;
   rating: number;
-  bookshelf: string;
+  bookshelves: string[];
 }
 
 export interface Bookshelf {

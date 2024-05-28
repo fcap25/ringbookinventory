@@ -20,6 +20,7 @@ import { HomeBg } from '../assets';
 import BookList from '../book/BookList';
 import BookSearch from '../book/BookSearch';
 import { BookContext } from '../contexts/BookContext';
+import { useBookshelf } from '../contexts/BookshelfContext';
 
 const Home: React.FC = () => {
   const {
@@ -31,6 +32,7 @@ const Home: React.FC = () => {
     catchDupe,
     searchInventory,
   } = useContext(BookContext)!;
+  const { bookshelves } = useBookshelf();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filterCriteria, setFilterCriteria] = useState<string>('' as string);
   const [selectedAuthor, setSelectedAuthor] = useState<string>('');
@@ -63,6 +65,14 @@ const Home: React.FC = () => {
     filteredBooks.sort((a, b) => a.rating - b.rating);
   } else if (filterCriteria === 'recently-added') {
     filteredBooks = [...books].reverse();
+  } else if (filterCriteria.startsWith('bookshelf-')) {
+    const selectedBookshelf = filterCriteria.replace('bookshelf-', '');
+    const shelf = bookshelves.find(shelf => shelf.name === selectedBookshelf);
+    if (shelf) {
+      filteredBooks = books.filter(book => shelf.books.includes(book.isbn));
+    } else {
+      filteredBooks = [];
+	}
   }
 
   return (
