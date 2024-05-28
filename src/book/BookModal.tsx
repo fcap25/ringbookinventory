@@ -12,7 +12,7 @@ import {
   VStack,
   Checkbox,
 } from '@chakra-ui/react';
-import { Book, Bookshelf } from '../types';
+import { Book } from '../types';
 import { useBookshelf } from '../contexts/BookshelfContext';
 
 interface BookModalProps {

@@ -76,7 +76,6 @@ const BookSearch: React.FC<BookSearchProps> = ({
 }) => {
   const [isbn, setIsbn] = useState<string>('');
   const { addBook } = useContext(BookContext)!;
-  const { addBookshelf, deleteBookshelf, editBookshelf } = useBookshelf();
   const { bookshelves } = useBookshelf();
   const toast = useToast();
 

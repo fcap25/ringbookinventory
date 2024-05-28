@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Grid, GridItem, VStack,  Box  } from '@chakra-ui/react';
+import React from 'react';
+import { Grid, GridItem, VStack, Box  } from '@chakra-ui/react';
 import { Book } from '../types';
 import BookCard from './BookCard';
 import usePagination from '../hooks/usePagination';

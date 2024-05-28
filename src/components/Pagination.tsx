@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Center, IconButton, List, ListItem, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Button, Center, IconButton, List, ListItem, Text } from '@chakra-ui/react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
 interface PaginationProps {
@@ -9,8 +9,6 @@ interface PaginationProps {
 }
 
 export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-  const isMobile = useBreakpointValue({ base: true, md: false });
-
   const handlePrevPage = () => {
     if (currentPage > 1) onPageChange(currentPage - 1);
   };
