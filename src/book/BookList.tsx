@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Grid, GridItem, VStack, Button, HStack } from '@chakra-ui/react';
+import { Grid, GridItem, VStack,  Box  } from '@chakra-ui/react';
 import { Book } from '../types';
 import BookCard from './BookCard';
 import usePagination from '../hooks/usePagination';
+import { Pagination } from "../components";
 
 interface BookListProps {
   books: Book[];
@@ -12,7 +13,11 @@ interface BookListProps {
 
 const BookList: React.FC<BookListProps> = ({ books, rateBook, deleteBook }) => {
   const booksPerPage = 12;
-  const { currentData: currentBooks, currentPage, totalPages, nextPage, prevPage } = usePagination(books, booksPerPage);
+  const { currentData: currentBooks, currentPage, totalPages, setPage } = usePagination(books, booksPerPage);
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
 
   return (
     <VStack spacing={4} w="100%" h="100%">
@@ -34,14 +39,13 @@ const BookList: React.FC<BookListProps> = ({ books, rateBook, deleteBook }) => {
           </GridItem>
         ))}
       </Grid>
-      <HStack position={"absolute"} bottom="10">
-        <Button onClick={prevPage} disabled={currentPage === 1}>
-          Previous
-        </Button>
-        <Button onClick={nextPage} disabled={currentPage === totalPages}>
-          Next
-        </Button>
-      </HStack>
+	  <Box position="absolute" bottom="10">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </Box>
     </VStack>
   );
 };

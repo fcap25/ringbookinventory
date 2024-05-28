@@ -9,15 +9,11 @@ const usePagination = (data: any[], itemsPerPage: number) => {
     currentPage * itemsPerPage
   );
 
-  const nextPage = () => {
-    setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+  const setPage = (page: number) => {
+    setCurrentPage(page);
   };
 
-  const prevPage = () => {
-    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
-  };
-
-  return { currentData, currentPage, totalPages, nextPage, prevPage };
+  return { currentData, currentPage, totalPages, setPage };
 };
 
 export default usePagination;

@@ -1,2 +1,3 @@
 import StarRating from './StarRating';
-export { StarRating };
+import { Pagination } from './Pagination';
+export { StarRating, Pagination };
