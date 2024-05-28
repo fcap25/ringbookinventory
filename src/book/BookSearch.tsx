@@ -199,7 +199,7 @@ const BookSearch: React.FC<BookSearchProps> = ({
         style={{
           width: '50%',
           zIndex: '20',
-          justifySelf: 'center',
+          justifySelf: 'end',
           padding: 10,
         }}
       >
