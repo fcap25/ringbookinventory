@@ -2,7 +2,15 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Link To Live Deployed App
+
+[Deployed Link](https://aquamarine-malasada-bfab4e.netlify.app)
+
 ## Available Scripts
+
+### `npm install` 
+
+At root before using any available script commands.
 
 In the project directory, you can run:
 
