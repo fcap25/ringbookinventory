@@ -1,5 +1,11 @@
 // src/contexts/BookContext.tsx
-import React, { createContext, useState, useEffect, useRef, ReactNode } from 'react';
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useRef,
+  ReactNode,
+} from 'react';
 import { Book } from '../types';
 
 interface BookContextProps {
@@ -18,7 +24,9 @@ const BookContext = createContext<BookContextProps | undefined>(undefined);
 
 const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const savedBooks = localStorage.getItem('books');
-  const [books, setBooks] = useState<Book[]>(savedBooks ? JSON.parse(savedBooks) : []);
+  const [books, setBooks] = useState<Book[]>(
+    savedBooks ? JSON.parse(savedBooks) : []
+  );
   const [duplicateBook, setDuplicateBook] = useState<Book | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const noAddRef = useRef(null);
@@ -35,39 +43,36 @@ const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, [books]);
 
   const addBook = (newBook: Book): boolean => {
-	const existingBook = books.find(
-	  book => book.title === newBook.title && book.author === newBook.author
-	);
-  
-	if (existingBook) {
-	  setDuplicateBook(newBook);
-	  setIsDuplicate(true);
-	  return true;
-	} else {
-	  setBooks((prevBooks) => [...prevBooks, newBook]);
-	  return false;
-	}
+    const existingBook = books.find(
+      book => book.title === newBook.title && book.author === newBook.author
+    );
+
+    if (existingBook) {
+      setDuplicateBook(newBook);
+      setIsDuplicate(true);
+      return true;
+    } else {
+      setBooks(prevBooks => [...prevBooks, newBook]);
+      return false;
+    }
   };
-  
 
   const confirmAddBook = () => {
     if (duplicateBook) {
-      setBooks((prevBooks) => [...prevBooks, duplicateBook]);
+      setBooks(prevBooks => [...prevBooks, duplicateBook]);
       setDuplicateBook(null);
       setIsDuplicate(false);
     }
   };
 
   const rateBook = (isbn: string, rating: number) => {
-    setBooks((prevBooks) =>
-      prevBooks.map((book) =>
-        book.isbn === isbn ? { ...book, rating } : book
-      )
+    setBooks(prevBooks =>
+      prevBooks.map(book => (book.isbn === isbn ? { ...book, rating } : book))
     );
   };
 
   const deleteBook = (isbn: string) => {
-    setBooks((prevBooks) => prevBooks.filter((book) => book.isbn !== isbn));
+    setBooks(prevBooks => prevBooks.filter(book => book.isbn !== isbn));
   };
 
   const catchDupe = () => {
@@ -76,15 +81,27 @@ const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const searchInventory = (searchTerm: string, book: Book): boolean => {
-	return (
-	  book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-	  book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-	  book.isbn.toLowerCase().includes(searchTerm.toLowerCase())
-	);
+    return (
+      book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.isbn.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   };
 
   return (
-    <BookContext.Provider value={{ books, addBook, confirmAddBook, rateBook, deleteBook, isDuplicate, duplicateBook, catchDupe, searchInventory }}>
+    <BookContext.Provider
+      value={{
+        books,
+        addBook,
+        confirmAddBook,
+        rateBook,
+        deleteBook,
+        isDuplicate,
+        duplicateBook,
+        catchDupe,
+        searchInventory,
+      }}
+    >
       {children}
     </BookContext.Provider>
   );

@@ -7,13 +7,13 @@ import { BookProvider } from './contexts/BookContext';
 import theme from './styles/index';
 
 function App() {
-	return (
-	  <ChakraProvider theme={theme}>
-		<BookProvider>
-		  <Home />
-		</BookProvider>
-	  </ChakraProvider>
-	);
-  }
+  return (
+    <ChakraProvider theme={theme}>
+      <BookProvider>
+        <Home />
+      </BookProvider>
+    </ChakraProvider>
+  );
+}
 
 export default App;
