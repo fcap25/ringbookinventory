@@ -22,10 +22,10 @@ const BookList: React.FC<BookListProps> = ({ books, rateBook, deleteBook }) => {
   return (
     <VStack spacing={4} w="100%" h="100%">
       <Grid
-        templateColumns={'repeat(6, 1fr)'}
+        templateColumns={{base:'repeat(2, 1fr)', md: 'repeat(3, 1fr)', xl:'repeat(6, 1fr)'}}
         templateRows={'repeat(2, 1fr)'}
-        gap={6}
-        w="90%"
+        gap={{base: 2, md: 6}}
+        w={{base:"auto", lg: "90%"}}
         h="auto"
         mt={10}
       >
